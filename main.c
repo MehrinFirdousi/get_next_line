@@ -1,6 +1,3 @@
-#include <fcntl.h>
-#include <windows.h>
-#include <stdio.h>
 #include "get_next_line.h"
 
 /*TODO:
@@ -10,16 +7,37 @@
 	- should we null terminate the last string if we reach EOF and there was no \n?
 */
 
-int main()
+void	test(int i)
+{
+	static char	*res = 0;
+
+	if (res == 0)
+	{
+		res = (char *)malloc(3 * sizeof(char));
+		res[0] = 'a';
+		res[1] = 'b';
+		res[2] = 0;
+		printf("ires=%s\n", res);
+	}
+	printf("ores=%s\n", res);
+	if (i == 2 && res != 0)
+		free(res);
+}
+
+int	main()
 {
     int fd = open("a.txt", O_RDONLY);
-	char *res;
-	int i = 0;
-	do
-	{
-		res = get_next_line(fd);
-		printf("%s\n", res);
-		free(res);
-	} while (res);
-    return 0;
+	int size;
+	char *res = (char *)malloc(30 * sizeof(char));
+	// do
+	// {
+	// 	res = get_next_line(fd);
+	// 	printf("%s", res);
+	// 	free(res);
+	// } while (res);
+
+	size = read(fd, res, 7);
+	printf("%s\n%d\n", res, size);
+	free(res);
+	return (0);
 }
