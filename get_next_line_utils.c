@@ -6,7 +6,7 @@
 /*   By: mfirdous <mfirdous@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 21:45:34 by mfirdous          #+#    #+#             */
-/*   Updated: 2022/08/02 21:39:32 by mfirdous         ###   ########.fr       */
+/*   Updated: 2022/08/03 20:12:52 by mfirdous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char *ft_strndup(const char *s, int n)
 
 	if (!s)
 		return (0);
-	newStr = malloc(n * sizeof(char));
+	newStr = calloc(n, n * sizeof(char));
 	if (!newStr)
 		return (0);
 	i = -1;
@@ -43,21 +43,41 @@ char *ft_strndup(const char *s, int n)
 	return (newStr);
 }
 
-
-char *ft_strjoin(char const *s1, char const *s2)
+char	*ft_strnjoin(char **buf, int *len1, char **new_block, int len2)
 {
-	int		len1;
-	int		len2;
-	char	*res;
+	char	*new_buf;
+	int		i;
+
+	new_buf = (char *)calloc((*len1 + len2), (*len1 + len2) * sizeof(char));
+	i = -1;
+	if (!new_buf)
+		return (0);	
+	while (++i < *len1)
+		new_buf[i] = (*buf)[i];
+	while (i < *len1 + len2)
+	{	
+		new_buf[i] = (*new_block)[i - *len1];
+		i++;
+	}
+	//printf("new_buf= %s\n", new_buf);
+	*len1 = i;
+	free(*buf);
+	free(*new_block);
+	return (new_buf);
+}
+
+// create final line to return from buf and modify buf to contain the reserve bytes
+char *get_line(char **buf, int *buf_len, int line_len)
+{
+	char *line;
+	char *reserve;
+
+	line = ft_strndup(*buf, line_len);
+	//printf("line: %s, %d\n", line, line_len);
+	reserve = ft_strndup(*buf + line_len, *buf_len - line_len);
 	
-	if (!s1 && !s2)
-		return (0);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	res = (char *)malloc((len1 + len2 + 1) * sizeof(char));
-	if (!res)
-		return (0);
-	ft_strlcpy(res, s1, len1 + len2 + 1);
-	ft_strlcat(res, s2, len1 + len2 + 1);
-	return (res);
+	free(*buf);
+	*buf = reserve;
+	*buf_len -= line_len;
+	return (line);
 }

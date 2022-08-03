@@ -6,7 +6,7 @@
 /*   By: mfirdous <mfirdous@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 21:43:41 by mfirdous          #+#    #+#             */
-/*   Updated: 2022/08/02 15:58:49 by mfirdous         ###   ########.fr       */
+/*   Updated: 2022/08/03 18:01:38 by mfirdous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
-//# include <unistd.h>
-# include <windows.h>
+# include <unistd.h>
 
 char	*get_next_line(int fd);
-int		is_a_line(char *str, int len);
+int		has_new_line(char *str, int len);
+char	*ft_strndup(const char *s, int n);
+char	*ft_strnjoin(char **buf, int *len1, char **new_block, int len2);
+char	*get_line(char **buf, int *buf_len, int line_len);
 
 #endif

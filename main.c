@@ -27,20 +27,47 @@ void	test(int i)
 		free(res);
 }
 
+void	test2(char **buf)
+{
+	char *new_buf;
+	int i = 0;
+	new_buf = malloc(11 * sizeof(char));
+	
+	while(i < 5)
+	{
+		new_buf[i] = (*buf)[i];
+		i++;
+	}
+	while(i < 10)
+	{
+		new_buf[i] = 'a';
+		i++;
+	}
+	new_buf[i] = 0;
+	free(*buf);
+	printf("new_buf = %s\n", new_buf);
+	*buf = new_buf;
+}
 int	main()
 {
     int fd = open("a.txt", O_RDONLY);
-	int bytes_read;
+	int i = -1;
 	char *res = (char *)malloc(30 * sizeof(char));
-	// do
-	// {
-	// 	res = get_next_line(fd);
-	// 	printf("%s", res);
-	// 	free(res);
-	// } while (res);
-
-	bytes_read = read(fd, res, 13);
-	printf("%s\n%d\n", res, bytes_read);
-	free(res);
+	while(res)
+	{
+		res = get_next_line(fd);
+		printf("%s", res);
+		free(res);
+	}
+	// res[0] = 'h';
+	// res[1] = 'i';
+	// res[2] = 'j';
+	// res[3] = 'k';
+	// res[4] = 'l';
+	// res[5] = 0;
+	// printf("%s\n", res);
+	// test2(&res);
+	// printf("%s\n", res);
+	// free(res);
 	return (0);
 }
