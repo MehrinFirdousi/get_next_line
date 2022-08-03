@@ -21,9 +21,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+//# include <io.h>
 
 char	*get_next_line(int fd);
-int		has_new_line(char *str, int len);
+int		read_block(int fd, char *buf, int size)
+int		has_new_line(char *buf);
 char	*ft_strndup(const char *s, int n);
 char	*ft_strnjoin(char **buf, int *len1, char **new_block, int len2);
 char	*get_line(char **buf, int *buf_len, int line_len);

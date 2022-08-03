@@ -16,13 +16,24 @@
    For str="abcd\nef", returns 5
             0123 456
 */
-int	has_new_line(char *str, int len)
+
+// reads a block of size bytes from fd into buf and null terminates the string
+int	read_block(int fd, char *buf, int size)
+{
+	int bytes_read;
+
+	bytes_read = read(fd, buf, BUFFER_SIZE);
+	buf[bytes_read] = 0;
+	return (bytes_read);
+}
+
+int	has_new_line(char *buf, int len)
 {
 	int	i;
 
 	i = -1;
-	while (++i < len)
-		if (str[i] == '\n')
+	while (buf[i])
+		if (buf[i] == '\n')
 			return (i + 1);
 	return (0);
 }
