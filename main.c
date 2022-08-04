@@ -7,7 +7,10 @@
 	- should we null terminate the last string if we reach EOF and there was no \n?
 	- IMPORTANT: check if EOF counts as an additional character 
 	- store bytes_read and length of the new block, use for strnjoin 
-	fuck this im sleepyaf its 2:18am
+	
+	
+	- move malloc to read_block
+	- move line_len line to while condition if possible
 */
 
 void	test(int i)
@@ -56,7 +59,7 @@ int	main()
 	while(res)
 	{
 		res = get_next_line(fd);
-		printf("%s", res);
+		printf("\n+%s", res);
 		free(res);
 	}
 	// res[0] = 'h';

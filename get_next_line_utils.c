@@ -6,7 +6,7 @@
 /*   By: mfirdous <mfirdous@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 21:45:34 by mfirdous          #+#    #+#             */
-/*   Updated: 2022/08/03 20:12:52 by mfirdous         ###   ########.fr       */
+/*   Updated: 2022/08/04 20:50:26 by mfirdous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,31 @@
             0123 456
 */
 
-// reads a block of size bytes from fd into buf and null terminates the string
-int	read_block(int fd, char *buf, int size)
-{
-	int bytes_read;
+// reads a block of BUFFER_SIZE bytes from fd into buf and null terminates the string
 
-	bytes_read = read(fd, buf, BUFFER_SIZE);
-	buf[bytes_read] = 0;
-	return (bytes_read);
+int	ft_strlen(char *s)
+{
+	int	len;
+
+	if (!s)
+		return (0);
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
 }
 
-int	has_new_line(char *buf, int len)
+int	has_new_line(char *buf)
 {
 	int	i;
 
 	i = -1;
-	while (buf[i])
+	while (buf[++i])
+	{
 		if (buf[i] == '\n')
 			return (i + 1);
+		//i++;
+	}
 	return (0);
 }
 
@@ -43,52 +50,61 @@ char *ft_strndup(const char *s, int n)
 	char	*newStr;
 	int		i;
 
-	if (!s)
+	if (!s) // maybe remove
 		return (0);
-	newStr = calloc(n, n * sizeof(char));
+	newStr = malloc((n + 1) * sizeof(char));
 	if (!newStr)
 		return (0);
 	i = -1;
 	while(++i < n)
 		newStr[i] = s[i];
+	newStr[i] = 0;
 	return (newStr);
 }
 
-char	*ft_strnjoin(char **buf, int *len1, char **new_block, int len2)
+char	*ft_strnjoin(char **buf, char **new_block)
 {
 	char	*new_buf;
 	int		i;
+	int		len1;
+	int		len2;
 
-	new_buf = (char *)calloc((*len1 + len2), (*len1 + len2) * sizeof(char));
-	i = -1;
+	len1 = ft_strlen(*buf);
+	len2 = ft_strlen(*new_block);
+	new_buf = (char *)malloc((len1 + len2 + 1) * sizeof(char));
 	if (!new_buf)
-		return (0);	
-	while (++i < *len1)
+		return (0);
+	i = -1;
+	while (++i < len1)
 		new_buf[i] = (*buf)[i];
-	while (i < *len1 + len2)
-	{	
-		new_buf[i] = (*new_block)[i - *len1];
+	while (i < len1 + len2)
+	{
+		new_buf[i] = (*new_block)[i - len1];
 		i++;
 	}
-	//printf("new_buf= %s\n", new_buf);
-	*len1 = i;
+	new_buf[i] = 0;
 	free(*buf);
 	free(*new_block);
 	return (new_buf);
 }
 
 // create final line to return from buf and modify buf to contain the reserve bytes
-char *get_line(char **buf, int *buf_len, int line_len)
+char *get_line(char **buf, char **new_block, int bytes_read, int line_len)
 {
-	char *line;
-	char *reserve;
-
-	line = ft_strndup(*buf, line_len);
-	//printf("line: %s, %d\n", line, line_len);
-	reserve = ft_strndup(*buf + line_len, *buf_len - line_len);
+	char	*line;
+	char	*reserve;
+	int		buf_len;
+	int		final_len;
 	
+	*buf = ft_strnjoin(buf, new_block);
+	//printf("GLbuf = %s\n", *buf);
+	buf_len = ft_strlen(*buf);
+	final_len = buf_len - bytes_read + line_len;
+	line = ft_strndup(*buf, final_len);
+	
+	//printf("line: %s, %d\n", line, final_len);
+	reserve = ft_strndup(*buf + final_len, bytes_read - line_len);
 	free(*buf);
 	*buf = reserve;
-	*buf_len -= line_len;
 	return (line);
 }

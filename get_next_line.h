@@ -6,7 +6,7 @@
 /*   By: mfirdous <mfirdous@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 21:43:41 by mfirdous          #+#    #+#             */
-/*   Updated: 2022/08/03 18:01:38 by mfirdous         ###   ########.fr       */
+/*   Updated: 2022/08/04 20:16:53 by mfirdous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@
 //# include <io.h>
 
 char	*get_next_line(int fd);
-int		read_block(int fd, char *buf, int size)
+int		read_block(int fd, char *buf);
 int		has_new_line(char *buf);
+int		ft_strlen(char *str);
 char	*ft_strndup(const char *s, int n);
-char	*ft_strnjoin(char **buf, int *len1, char **new_block, int len2);
-char	*get_line(char **buf, int *buf_len, int line_len);
+char	*ft_strnjoin(char **buf, char **new_block);
+char	*get_line(char **buf, char **new_block, int bytes_read, int line_len);
 
 #endif
