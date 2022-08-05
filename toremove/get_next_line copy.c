@@ -12,19 +12,12 @@
 
 #include "get_next_line.h"
 
-int	read_block(int fd, char **block)
+int	read_block(int fd, char *buf)
 {
 	int bytes_read;
 
-	*block = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	bytes_read = read(fd, *block, BUFFER_SIZE);
-	if (bytes_read <= 0)
-	{
-		free(*block);
-		*block = 0;
-	}
-	else
-		(*block)[bytes_read] = 0;
+	bytes_read = read(fd, buf, BUFFER_SIZE);
+	buf[bytes_read] = 0;
 	return (bytes_read);
 }
 
@@ -35,18 +28,23 @@ char	*get_next_line(int fd)
 	int			bytes_read;
 	int			line_len;
 
-	if (!buf || !buf[0])
-		bytes_read = read_block(fd, &buf);
-	else
-		bytes_read = ft_strlen(buf);
-	line_len = has_new_line(buf);
+	new_block = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	bytes_read = read_block(fd, new_block);
+	printf("\n\tobuf = %s", buf);
+	printf("\n\tonew_block = %s, %d", new_block, bytes_read);
+	line_len = has_new_line(new_block);
+	printf("\n\tline_len = %d\n", line_len);
 	while (line_len == 0 && bytes_read > 0)
 	{
-		bytes_read = read_block(fd, &new_block);	
+		buf = ft_strnjoin(&buf, &new_block); // will free buf and new_block after creating its joined string
+		printf("\n\t-buf = %s, %d\n", buf, ft_strlen(buf));
+		new_block = malloc((BUFFER_SIZE + 1) * sizeof(char));
+		bytes_read = read_block(fd, new_block);	
+		printf("\t-newblock = %s, %d\n", new_block, bytes_read);
 		line_len = has_new_line(new_block);
-		buf = ft_strnjoin(&buf, &new_block);
 	}
-	if (bytes_read <= 0 && !buf) // nothing to read and buffer is empty
+	if (bytes_read <= 0)
 		return (0);
-	return (get_line(&buf, bytes_read, line_len));
+	return (get_line(&buf, &new_block, bytes_read, line_len));
+	return (0);
 }

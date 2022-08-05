@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
@@ -21,7 +21,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-//# include <windows.h>
+
+typedef struct	s_file
+{
+	int fd;
+	char *buf;
+	struct s_file *next;
+}				t_file;
 
 char	*get_next_line(int fd);
 int		read_block(int fd, char **buf);
@@ -30,5 +36,7 @@ int		ft_strlen(char *str);
 char	*ft_strndup(const char *s, int n);
 char	*ft_strnjoin(char **buf, char **new_block);
 char	*get_line(char **buf, int bytes_read, int line_len);
+char	*check_fd(int fd, t_file **files);
+void	free_node(int fd, t_file **files);
 
 #endif

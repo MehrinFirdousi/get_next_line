@@ -1,5 +1,5 @@
-#include "get_next_line.h"
-
+//#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 /*TODO:
 	- make it return null on:
 		1. after reaching end of file
@@ -8,69 +8,50 @@
 	- IMPORTANT: check if EOF counts as an additional character 
 	- store bytes_read and length of the new block, use for strnjoin 
 	
-	
-	- move malloc to read_block
 	- move line_len line to while condition if possible
 */
 
-void	test(int i)
+void test()
 {
-	static char	*res = 0;
-
-	if (res == 0)
+	static t_file file;
+	printf("file fd = %d\n", file.fd);
+	printf("file buf = %s\n", file.buf);
+	if (file.fd == 0)
 	{
-		res = (char *)malloc(3 * sizeof(char));
-		res[0] = 'a';
-		res[1] = 'b';
-		res[2] = 0;
-		printf("ires=%s\n", res);
+		file.fd = 1;
+		file.buf = (char *)malloc(10 * sizeof(char));
+		file.buf[9] = 0;
+		for (int i = 0; i < 9; i++)
+			file.buf[i] = i + 65 + file.fd;
+		printf("%s\n", file.buf);
 	}
-	printf("ores=%s\n", res);
-	if (i == 2 && res != 0)
-		free(res);
-}
-
-void	test2(char **buf)
-{
-	char *new_buf;
-	int i = 0;
-	new_buf = malloc(11 * sizeof(char));
-	
-	while(i < 5)
+	else
 	{
-		new_buf[i] = (*buf)[i];
-		i++;
+		file.buf[0] = 'X';
+		printf("%s\n", file.buf);
 	}
-	while(i < 10)
-	{
-		new_buf[i] = 'a';
-		i++;
-	}
-	new_buf[i] = 0;
-	free(*buf);
-	printf("new_buf = %s\n", new_buf);
-	*buf = new_buf;
 }
 int	main()
 {
-    int fd = open("a.txt", O_RDONLY);
+    int fd1 = open("a.txt", O_RDONLY);
+    int fd2 = open("b.txt", O_RDONLY);
+    int fd3 = open("c.txt", O_RDONLY);
+	char *res;
 	int i = -1;
-	char *res = (char *)malloc(30 * sizeof(char));
-	while(res)
+	do
 	{
-		res = get_next_line(fd);
-		printf("\n+%s", res);
+		res = get_next_line(fd1);
+		printf("a: %s", res);
 		free(res);
-	}
-	// res[0] = 'h';
-	// res[1] = 'i';
-	// res[2] = 'j';
-	// res[3] = 'k';
-	// res[4] = 'l';
-	// res[5] = 0;
-	// printf("%s\n", res);
-	// test2(&res);
-	// printf("%s\n", res);
-	// free(res);
+		i++;
+		res = get_next_line(fd2);
+		printf("b: %s", res);
+		free(res);
+		
+		res = get_next_line(fd3);
+		printf("c: %s", res);
+		free(res);
+	} while(res);
+
 	return (0);
 }
