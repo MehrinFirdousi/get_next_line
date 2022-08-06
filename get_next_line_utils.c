@@ -37,21 +37,21 @@ int	has_new_line(char *buf)
 	return (0);
 }
 
-char *ft_strndup(const char *s, int n)
+char	*ft_strndup(const char *s, int n)
 {
-	char	*newStr;
+	char	*new_str;
 	int		i;
 
 	if (!s || n == 0)
 		return (0);
-	newStr = malloc((n + 1) * sizeof(char));
-	if (!newStr)
+	new_str = malloc((n + 1) * sizeof(char));
+	if (!new_str)
 		return (0);
 	i = -1;
-	while(++i < n)
-		newStr[i] = s[i];
-	newStr[i] = 0;
-	return (newStr);
+	while (++i < n)
+		new_str[i] = s[i];
+	new_str[i] = 0;
+	return (new_str);
 }
 
 char	*ft_strnjoin(char **buf, char **new_block)
@@ -80,7 +80,7 @@ char	*ft_strnjoin(char **buf, char **new_block)
 	return (new_buf);
 }
 
-char *get_line(char **buf, int bytes_read, int line_len)
+char	*get_line(char **buf, int bytes_read, int line_len)
 {
 	char	*line;
 	char	*reserve;

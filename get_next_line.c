@@ -14,9 +14,11 @@
 
 int	read_block(int fd, char **block)
 {
-	int bytes_read;
+	int	bytes_read;
 
-	*block = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	*block = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!(*block))
+		return (0);
 	bytes_read = read(fd, *block, BUFFER_SIZE);
 	if (bytes_read <= 0)
 	{
@@ -42,11 +44,11 @@ char	*get_next_line(int fd)
 	line_len = has_new_line(buf);
 	while (line_len == 0 && bytes_read > 0)
 	{
-		bytes_read = read_block(fd, &new_block);	
+		bytes_read = read_block(fd, &new_block);
 		line_len = has_new_line(new_block);
 		buf = ft_strnjoin(&buf, &new_block);
 	}
-	if (bytes_read <= 0 && !buf) // nothing to read and buffer is empty
+	if (bytes_read <= 0 && !buf)
 		return (0);
 	return (get_line(&buf, bytes_read, line_len));
 }
